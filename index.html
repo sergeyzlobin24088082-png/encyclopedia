@@ -1,0 +1,1757 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>🦠 Болезни, изменившие мир</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Arial', system-ui, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f0c1f 0%, #1a1428 50%, #0d0b1a 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            position: relative;
+            transition: background 0.3s;
+        }
+        
+        body.light-theme {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* ========== ЗАГОЛОВОК ========== */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            color: #fff;
+            font-size: 4.5em;
+            margin-bottom: 15px;
+            text-shadow: 0 0 30px #ff6b6b, 0 0 60px #ffd93d;
+            animation: glowPulse 3s infinite;
+        }
+        
+        @keyframes glowPulse {
+            0%, 100% { text-shadow: 0 0 30px #ff6b6b, 0 0 60px #ffd93d; }
+            50% { text-shadow: 0 0 50px #ff6b6b, 0 0 90px #ffd93d; }
+        }
+        
+        .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.5em;
+            background: rgba(255, 107, 107, 0.2);
+            backdrop-filter: blur(10px);
+            display: inline-block;
+            padding: 12px 30px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 217, 61, 0.3);
+        }
+        
+        /* ========== ПАНЕЛЬ УПРАВЛЕНИЯ ========== */
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding: 20px 30px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 60px;
+            border: 1px solid rgba(255, 217, 61, 0.3);
+        }
+        
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 15px 25px;
+            border-radius: 50px;
+            border: 2px solid #ff6b6b;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 1.2em;
+            outline: none;
+        }
+        
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 12px 25px;
+            border-radius: 50px;
+            border: 2px solid #ff6b6b;
+            background: transparent;
+            color: #fff;
+            font-size: 1.1em;
+            cursor: pointer;
+        }
+        
+        .filter-btn.active {
+            background: #ff6b6b;
+            border-color: #ffd93d;
+        }
+        
+        /* ========== ПАНЕЛЬ СТАТИСТИКИ ========== */
+        .stats-panel {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 20px;
+            padding: 20px 30px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 60px;
+            border: 1px solid rgba(255, 217, 61, 0.3);
+        }
+        
+        .stats-info {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #fff;
+            font-size: 1.2em;
+        }
+        
+        .stat-value {
+            color: #ffd93d;
+            font-weight: bold;
+            font-size: 1.5em;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .random-btn, .reset-btn, .export-btn, .theme-btn, .compare-btn, .quiz-btn {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border-radius: 50px;
+            cursor: pointer;
+            border: 2px solid #ffd93d;
+        }
+        
+        .random-btn { background: linear-gradient(45deg, #ff6b6b, #ff4757); color: white; }
+        .reset-btn { background: transparent; color: #ffd93d; }
+        .export-btn { background: linear-gradient(45deg, #4CAF50, #45a049); color: white; }
+        .theme-btn { background: linear-gradient(45deg, #9c27b0, #7b1fa2); color: white; }
+        .compare-btn { background: linear-gradient(45deg, #2196F3, #1976D2); color: white; }
+        .quiz-btn { background: linear-gradient(45deg, #FF9800, #F57C00); color: white; }
+        
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b6b, #ffd93d);
+            transition: width 0.5s ease;
+        }
+        
+        /* ========== СЕТКА КАРТОЧЕК ========== */
+        .diseases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 35px;
+            padding: 20px;
+        }
+        
+        .disease-card {
+            background: rgba(20, 15, 30, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 30px 25px;
+            text-align: center;
+            cursor: pointer;
+            border: 2px solid rgba(255, 107, 107, 0.3);
+            position: relative;
+            color: #fff;
+        }
+        
+        .light-theme .disease-card {
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+        }
+        
+        .disease-card.viewed {
+            opacity: 0.7;
+            border-color: #ffd93d;
+        }
+        
+        .disease-card.viewed::after {
+            content: '✓';
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 2em;
+            color: #ffd93d;
+        }
+        
+        .disease-card.favorite {
+            border: 4px solid gold;
+            box-shadow: 0 0 50px gold;
+        }
+        
+        .disease-card.favorite::before {
+            content: '★';
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            font-size: 2em;
+            color: gold;
+        }
+        
+        .image-container {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+        
+        .disease-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid #ff6b6b;
+            background: #1a1428;
+            padding: 10px;
+        }
+        
+        .disease-card h3 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+        
+        .disease-card p {
+            color: #ffd93d;
+            font-size: 1.2em;
+        }
+        
+        /* ========== МОДАЛЬНОЕ ОКНО ========== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: linear-gradient(145deg, #1f1a30, #151020);
+            max-width: 1000px;
+            width: 95%;
+            border-radius: 50px;
+            padding: 50px;
+            position: relative;
+            border: 3px solid #ff6b6b;
+            max-height: 90vh;
+            overflow-y: auto;
+            color: #fff;
+        }
+        
+        .light-theme .modal-content {
+            background: linear-gradient(145deg, #fff, #f5f5f5);
+            color: #333;
+            border: 3px solid #ff6b6b;
+        }
+        
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 50px;
+            cursor: pointer;
+            color: #ff6b6b;
+        }
+        
+        .modal-image-container {
+            width: 250px;
+            height: 250px;
+            margin: 0 auto 30px;
+        }
+        
+        .modal-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 5px solid #ffd93d;
+        }
+        
+        .modal h2 {
+            font-size: 3.5em;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .period {
+            color: #ffd93d;
+            font-size: 1.4em;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .info-card {
+            background: rgba(255, 107, 107, 0.1);
+            padding: 20px;
+            border-radius: 20px;
+            border: 1px solid #ff6b6b;
+            text-align: center;
+        }
+        
+        .info-card h4 {
+            color: #ffd93d;
+            font-size: 1.3em;
+            margin-bottom: 10px;
+        }
+        
+        .symptoms-box, .prevention-box, .history-box, .treatment-box {
+            margin: 20px 0;
+            padding: 25px;
+            border-radius: 30px;
+        }
+        
+        .symptoms-box { background: rgba(255, 107, 107, 0.1); border: 1px solid #ff6b6b; }
+        .prevention-box { background: rgba(0, 0, 0, 0.3); border: 2px solid rgba(255, 217, 61, 0.3); }
+        .history-box { background: rgba(76, 175, 80, 0.1); border: 1px solid #4CAF50; }
+        .treatment-box { background: rgba(33, 150, 243, 0.1); border: 1px solid #2196F3; }
+        
+        .light-theme .prevention-box { background: rgba(0, 0, 0, 0.05); }
+        
+        .symptoms-box h3, .prevention-box h3, .history-box h3, .treatment-box h3 {
+            color: #ffd93d;
+            font-size: 2em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .symptoms-box ul, .prevention-box ul, .history-box ul, .treatment-box ul {
+            list-style: none;
+        }
+        
+        .symptoms-box li, .prevention-box li, .history-box li, .treatment-box li {
+            padding: 12px;
+            margin: 8px 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border-left: 5px solid #ff6b6b;
+        }
+        
+        .light-theme .symptoms-box li, 
+        .light-theme .prevention-box li, 
+        .light-theme .history-box li, 
+        .light-theme .treatment-box li {
+            background: rgba(0, 0, 0, 0.05);
+            color: #333;
+        }
+        
+        .modal-footer {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .modal-footer button {
+            flex: 1;
+            min-width: 150px;
+            padding: 15px;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2em;
+            font-weight: bold;
+            border: 2px solid #ffd93d;
+        }
+        
+        .share-btn { background: #ffd93d; color: #0f0c1f; }
+        .favorite-btn { background: #ff6b6b; color: white; }
+        .compare-add-btn { background: #2196F3; color: white; }
+        .note-btn { background: #9c27b0; color: white; }
+        
+        .close-btn {
+            width: 100%;
+            padding: 20px;
+            border-radius: 60px;
+            background: linear-gradient(45deg, #ff6b6b, #ff4757);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5em;
+            font-weight: bold;
+            border: 2px solid #ffd93d;
+        }
+        
+        /* ========== СЕКЦИИ ========== */
+        .section {
+            margin-top: 60px;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border-radius: 40px;
+            border: 1px solid #ffd93d;
+            color: #fff;
+        }
+        
+        .light-theme .section {
+            background: rgba(255, 255, 255, 0.3);
+            color: #333;
+        }
+        
+        .section h2 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        /* ========== ИСТОРИЧЕСКАЯ ШКАЛА ========== */
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .timeline-item {
+            flex: 1;
+            min-width: 150px;
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 107, 107, 0.1);
+            border-radius: 20px;
+            border: 1px solid #ff6b6b;
+            cursor: pointer;
+        }
+        
+        .timeline-year {
+            color: #ffd93d;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        /* ========== СРАВНЕНИЕ ========== */
+        .compare-selectors {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .compare-select {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .compare-select label {
+            display: block;
+            color: #ffd93d;
+            font-size: 1.3em;
+            margin-bottom: 10px;
+        }
+        
+        .compare-select select {
+            width: 100%;
+            padding: 15px;
+            border-radius: 30px;
+            background: #1a1428;
+            border: 2px solid #ff6b6b;
+            color: #fff;
+            font-size: 1.2em;
+        }
+        
+        .light-theme .compare-select select {
+            background: #fff;
+            color: #333;
+        }
+        
+        .compare-select select option {
+            background: #1a1428;
+            color: #fff;
+        }
+        
+        .light-theme .compare-select select option {
+            background: #fff;
+            color: #333;
+        }
+        
+        .compare-table {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        .compare-col {
+            padding: 25px;
+            background: rgba(255, 107, 107, 0.1);
+            border-radius: 30px;
+            color: #fff;
+        }
+        
+        .light-theme .compare-col {
+            color: #333;
+        }
+        
+        .compare-col h3 {
+            color: #ffd93d;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .compare-col ul {
+            list-style: none;
+        }
+        
+        .compare-col li {
+            padding: 12px;
+            margin: 8px 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+        }
+        
+        .light-theme .compare-col li {
+            background: rgba(0, 0, 0, 0.05);
+        }
+        
+        /* ========== ВИКТОРИНА ========== */
+        .quiz-question {
+            background: rgba(255, 107, 107, 0.1);
+            padding: 30px;
+            border-radius: 30px;
+        }
+        
+        .quiz-question p {
+            font-size: 1.5em;
+            margin-bottom: 25px;
+        }
+        
+        .quiz-options {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .quiz-option {
+            padding: 15px 25px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid #ff6b6b;
+            border-radius: 50px;
+            color: #fff;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+        
+        .light-theme .quiz-option {
+            color: #333;
+            background: rgba(0, 0, 0, 0.05);
+        }
+        
+        .quiz-option:hover {
+            background: #ff6b6b;
+            color: white;
+        }
+        
+        .quiz-option.correct {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .quiz-option.wrong {
+            background: #f44336;
+            color: white;
+        }
+        
+        .quiz-stats {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+            color: #ffd93d;
+            font-size: 1.2em;
+        }
+        
+        .quiz-next {
+            padding: 15px 40px;
+            background: #ffd93d;
+            color: #0f0c1f;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+        
+        /* ========== ИЗБРАННОЕ ========== */
+        .favorites-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .favorite-item {
+            padding: 20px;
+            background: rgba(255, 107, 107, 0.1);
+            border-radius: 20px;
+            text-align: center;
+            cursor: pointer;
+            border: 1px solid gold;
+        }
+        
+        .favorite-item h3 {
+            color: gold;
+            font-size: 1.3em;
+        }
+           
+        /* ========== ГРАФИК ========== */
+        .chart-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            align-items: flex-end;
+            height: 300px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 30px;
+            gap: 20px;
+        }
+        
+        .chart-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 60px;
+        }
+        
+        .chart-bar {
+            width: 60px;
+            background: linear-gradient(to top, #ff6b6b, #ffd93d);
+            border-radius: 15px 15px 0 0;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .chart-bar:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px #ff6b6b;
+        }
+        
+        .chart-bar span {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        
+        .chart-label {
+            text-align: center;
+            color: #ffd93d;
+            margin-top: 10px;
+            font-size: 1.1em;
+            transform: rotate(-45deg);
+            transform-origin: top left;
+        }
+        
+        /* ========== УВЕДОМЛЕНИЯ ========== */
+        .notification {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #ffd93d;
+            color: #0f0c1f;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.2em;
+            transform: translateX(400px);
+            transition: transform 0.3s;
+            z-index: 2000;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        /* ========== СЧЕТЧИКИ ========== */
+        .counters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .counter {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 107, 107, 0.1);
+            border-radius: 20px;
+        }
+        
+        .counter-value {
+            color: #ffd93d;
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+        
+        .counter-label {
+            color: #fff;
+            font-size: 1.1em;
+        }
+        
+        .light-theme .counter-label {
+            color: #333;
+        }
+        
+        /* ========== ПОДПИСЬ ВНИЗУ ========== */
+        .footer {
+            margin-top: 80px;
+            padding: 30px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.2em;
+            border-top: 1px solid rgba(255, 217, 61, 0.3);
+        }
+        
+        .light-theme .footer {
+            color: rgba(0, 0, 0, 0.7);
+        }
+        
+        .footer span {
+            color: #ffd93d;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5em; }
+            .modal-content { padding: 30px; }
+            .info-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ШАПКА -->
+        <div class="header">
+            <h1>🦠 БОЛЕЗНИ, ИЗМЕНИВШИЕ МИР</h1>
+            <div class="subtitle">⚡ Интерактивная энциклопедия эпидемий ⚡</div>
+        </div>
+        
+        <!-- ПАНЕЛЬ УПРАВЛЕНИЯ -->
+        <div class="control-panel">
+            <div class="search-box">
+                <input type="text" class="search-input" id="searchInput" placeholder="🔍 Поиск болезней...">
+            </div>
+            <div class="filter-buttons">
+                <button class="filter-btn active" onclick="filterBy('all', this)">Все</button>
+                <button class="filter-btn" onclick="filterBy('viewed', this)">Просмотренные</button>
+                <button class="filter-btn" onclick="filterBy('unviewed', this)">Новые</button>
+                <button class="filter-btn" onclick="filterBy('favorites', this)">⭐ Избранное</button>
+            </div>
+        </div>
+        
+        <!-- ПАНЕЛЬ СТАТИСТИКИ -->
+        <div class="stats-panel">
+            <div class="stats-info">
+                <div class="stat-item"><span>📊 Всего:</span><span class="stat-value" id="totalCount">8</span></div>
+                <div class="stat-item"><span>👁️ Просмотрено:</span><span class="stat-value" id="viewedCount">0</span></div>
+                <div class="stat-item"><span>🎯 Осталось:</span><span class="stat-value" id="remainingCount">8</span></div>
+                <div class="stat-item"><span>⭐ В избранном:</span><span class="stat-value" id="favoritesCount">0</span></div>
+            </div>
+            <div class="action-buttons">
+                <button class="random-btn" onclick="openRandomDisease()">🎲 Случайная</button>
+                <button class="reset-btn" onclick="resetViewed()">🔄 Сброс</button>
+                <button class="export-btn" onclick="exportData()">📥 Экспорт</button>
+                <button class="theme-btn" onclick="toggleTheme()">🎨 Тема</button>
+                <button class="compare-btn" onclick="scrollToCompare()">⚖️ Сравнить</button>
+                <button class="quiz-btn" onclick="scrollToQuiz()">❓ Викторина</button>
+            </div>
+        </div>
+        
+        <!-- ПРОГРЕСС -->
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+        
+        <!-- СЧЕТЧИКИ -->
+        <div class="counters">
+            <div class="counter">
+                <div class="counter-value" id="totalVisits">0</div>
+                <div class="counter-label">Всего просмотров</div>
+            </div>
+            <div class="counter">
+                <div class="counter-value" id="uniqueVisits">0</div>
+                <div class="counter-label">Уникальных</div>
+            </div>
+            <div class="counter">
+                <div class="counter-value" id="favoritesStats">0</div>
+                <div class="counter-label">В избранном</div>
+            </div>
+            <div class="counter">
+                <div class="counter-value" id="quizScore">0</div>
+                <div class="counter-label">Очки викторины</div>
+            </div>
+        </div>
+        
+        <!-- СЕТКА КАРТОЧЕК -->
+        <div class="diseases-grid" id="diseasesGrid"></div>
+        
+        <!-- ИСТОРИЧЕСКАЯ ШКАЛА -->
+        <div class="section">
+            <h2>📅 Хронология эпидемий</h2>
+            <div class="timeline" id="timeline"></div>
+        </div>
+        
+        <!-- СРАВНЕНИЕ БОЛЕЗНЕЙ -->
+        <div class="section" id="compareSection">
+            <h2>⚖️ Сравнение болезней</h2>
+            <div class="compare-selectors">
+                <div class="compare-select">
+                    <label>Болезнь 1:</label>
+                    <select id="compare1" onchange="updateComparison()"></select>
+                </div>
+                <div class="compare-select">
+                    <label>Болезнь 2:</label>
+                    <select id="compare2" onchange="updateComparison()"></select>
+                </div>
+            </div>
+            <div class="compare-table" id="compareTable"></div>
+        </div>
+        
+        <!-- ВИКТОРИНА -->
+        <div class="section" id="quizSection">
+            <h2>❓ Викторина</h2>
+            <div class="quiz-stats">
+                <span>Вопрос <span id="quizCurrent">1</span> из <span id="quizTotal">15</span></span>
+                <span>Правильно: <span id="quizCorrect">0</span></span>
+            </div>
+            <div class="quiz-question" id="quizQuestion"></div>
+        </div>
+        
+        <!-- ИЗБРАННОЕ -->
+        <div class="section">
+            <h2>⭐ Избранные болезни</h2>
+            <div class="favorites-grid" id="favoritesGrid"></div>
+        </div>
+        
+        <!-- ГРАФИК СМЕРТНОСТИ -->
+        <div class="section">
+            <h2>📊 График смертности (млн человек)</h2>
+            <div class="chart-container" id="chart"></div>
+        </div>
+        
+        <!-- ПОДПИСЬ ВНИЗУ -->
+        <div class="footer">
+            Сайт выполнил <span>Ученик 10Б класса МБОУ "СОШ №45" Злобин Сергей</span>
+        </div>
+    </div>
+    
+    <!-- МОДАЛЬНОЕ ОКНО -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div class="modal-image-container">
+                <img id="modalImage" class="modal-image" src="" alt="">
+            </div>
+            <h2 id="modalTitle"></h2>
+            <div class="period" id="modalPeriod"></div>
+            
+            <div class="info-grid">
+                <div class="info-card"><h4>📅 Год</h4><p id="modalYear"></p></div>
+                <div class="info-card"><h4>💀 Смертность</h4><p id="modalMortality"></p></div>
+                <div class="info-card"><h4>🌍 Регион</h4><p id="modalRegion"></p></div>
+            </div>
+            
+            <div class="history-box">
+                <h3>📜 Историческая справка</h3>
+                <ul id="historyList"></ul>
+            </div>
+            
+            <div class="symptoms-box">
+                <h3>🤒 СИМПТОМЫ</h3>
+                <ul id="symptomsList"></ul>
+            </div>
+            
+            <div class="prevention-box">
+                <h3>🛡️ ПРОФИЛАКТИКА</h3>
+                <ul id="preventionList"></ul>
+            </div>
+            
+            <div class="treatment-box">
+                <h3>💊 ЛЕЧЕНИЕ</h3>
+                <ul id="treatmentList"></ul>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="share-btn" onclick="shareDisease()">📤 Поделиться</button>
+                <button class="favorite-btn" onclick="toggleFavorite()">⭐ В избранное</button>
+                <button class="compare-add-btn" onclick="addToCompare()">➕ Сравнить</button>
+            </div>
+            <button class="close-btn" onclick="closeModal()">✧ ЗАКРЫТЬ ✧</button>
+        </div>
+    </div>
+    
+    <!-- УВЕДОМЛЕНИЯ -->
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // ========== ДАННЫЕ ==========
+        const diseases = [
+            {
+                name: "БУБОННАЯ ЧУМА",
+                period: "XIV век - настоящее время",
+                year: "1346",
+                mortality: "75-100 млн",
+                region: "Евразия",
+                image: "chuma.JPEG",
+                history: [
+                    "🦠 Пандемия XIV века унесла треть населения Европы",
+                    "📖 Впервые описана в Библии как 'моровая язва'",
+                    "🏥 Первый карантин введен в Венеции в 1377 году",
+                    "🔬 Возбудитель открыт в 1894 году Александром Йерсеном"
+                ],
+                symptoms: [
+                    "🤒 Температура 39-40°C",
+                    "🩸 Воспаленные лимфоузлы",
+                    "🤢 Рвота с кровью",
+                    "😵 Сильная головная боль"
+                ],
+                prevention: [
+                    "🚫 Избегать грызунов",
+                    "🧴 Репелленты от блох",
+                    "😷 Изоляция больных",
+                    "💉 Вакцинация"
+                ],
+                treatment: [
+                    "💊 Антибиотики (стрептомицин)",
+                    "🏥 Госпитализация",
+                    "🩸 Дезинтоксикация",
+                    "💧 Поддержание водного баланса"
+                ],
+                viewed: false,
+                favorite: false
+            },
+            {
+                name: "ИСПАНСКИЙ ГРИПП",
+                period: "1918-1920 годы",
+                year: "1918",
+                mortality: "50 млн",
+                region: "Весь мир",
+                image: "ispanka.JPEG",
+                history: [
+                    "🌍 Заразилось 500 млн человек (треть населения)",
+                    "💀 Убила больше людей чем Первая мировая",
+                    "🔬 Вызвана вирусом H1N1",
+                    "📰 Название из-за цензуры в воюющих странах"
+                ],
+                symptoms: [
+                    "🤒 Внезапная температура",
+                    "🫁 Цианотичная пневмония",
+                    "🩸 Кровотечения",
+                    "😵 Сильная слабость"
+                ],
+                prevention: [
+                    "😷 Маски",
+                    "🧼 Гигиена рук",
+                    "🏠 Карантин",
+                    "💪 Иммунитет"
+                ],
+                treatment: [
+                    "😷 Кислородная терапия",
+                    "💊 Жаропонижающие",
+                    "🩺 Постельный режим",
+                    "💧 Обильное питье"
+                ],
+                viewed: false,
+                favorite: false
+            },
+            {
+                name: "НАТУРАЛЬНАЯ ОСПА",
+                period: "Древность - 1980",
+                year: "1157 до н.э.",
+                mortality: "300-500 млн",
+                region: "Весь мир",
+                image: "ospa.JPEG",
+                history: [
+                    "💉 Первая побежденная болезнь",
+                    "📜 Упоминается в древних текстах",
+                    "👑 Убила нескольких монархов",
+                    "🌍 Искоренена в 1980 году"
+                ],
+                symptoms: [
+                    "🌡️ Температура до 40°C",
+                    "🔴 Сыпь по всему телу",
+                    "💧 Пустулы с гноем",
+                    "🤒 Озноб"
+                ],
+                prevention: [
+                    "💉 Вакцинация",
+                    "🚫 Изоляция",
+                    "🧹 Дезинфекция",
+                    "😷 Маски"
+                ],
+                treatment: [
+                    "💊 Противовирусные",
+                    "🩺 Уход за кожей",
+                    "💧 Обильное питье",
+                    "🏥 Госпитализация"
+                ],
+                viewed: false,
+                favorite: false
+            },
+            {
+                name: "СИФИЛИС",
+                period: "1495 - наши дни",
+                year: "1495",
+                mortality: "8 млн",
+                region: "Весь мир",
+                image: "sifilis.JPEG",
+                history: [
+                    "🌊 Завезена из Америки",
+                    "👑 Болели многие короли",
+                    "🔬 Возбудитель открыт в 1905",
+                    "💊 Первый антибиотик пенициллин"
+                ],
+                symptoms: [
+                    "🔴 Твердый шанкр",
+                    "🌡️ Сыпь на теле",
+                    "🤒 Лихорадка",
+                    "🦴 Поражение костей"
+                ],
+                prevention: [
+                    "🛡️ Презервативы",
+                    "💉 Стерильные иглы",
+                    "🩸 Анализы крови",
+                    "👫 Верность"
+                ],
+                treatment: [
+                    "💊 Пенициллин",
+                    "🏥 Длительное лечение",
+                    "🩸 Контроль излеченности",
+                    "🤰 Лечение беременных"
+                ],
+                viewed: false,
+                favorite: false
+            },
+            {
+                name: "ХОЛЕРА",
+                period: "1817 - наши дни",
+                year: "1817",
+                mortality: "40-50 млн",
+                region: "Азия, Африка",
+                image: "holera.JPEG",
+                history: [
+                    "💧 7 пандемий",
+                    "🚰 Связана с загрязнением воды",
+                    "🔬 Открыта Робертом Кохом",
+                    "🏥 Лечение регидратацией"
+                ],
+                symptoms: [
+                    "💧 Водянистая диарея",
+                    "🤮 Рвота",
+                    "💦 Обезвоживание",
+                    "🦵 Судороги"
+                ],
+                prevention: [
+                    "💧 Чистая вода",
+                    "🍽️ Гигиена питания",
+                    "💉 Вакцинация",
+                    "🧼 Мытье рук"
+                ],
+                treatment: [
+                    "💧 Оральная регидратация",
+                    "💊 Антибиотики",
+                    "🏥 Внутривенные вливания",
+                    "🩺 Наблюдение"
+                ],
+                viewed: false,
+                favorite: false
+            },
+            {
+                name: "МАЛЯРИЯ",
+                period: "Древность - наши дни",
+                year: "2700 до н.э.",
+                mortality: "400 тыс/год",
+                region: "Тропики",
+                image: "malariya.JPEG",
+                history: [
+                    "🦟 Переносчик комары",
+                    "📜 Описана в древнем Китае",
+                    "🔬 Открыта в 1880 году",
+                    "💊 Лечение хинином"
+                ],
+                symptoms: [
+                    "🌡️ Приступы лихорадки",
+                    "🤒 Озноб",
+                    "😵 Головная боль",
+                    "🫠 Потливость"
+                ],
+                prevention: [
+                    "🦟 Сетки от комаров",
+                    "🧴 Репелленты",
+                    "💊 Таблетки",
+                    "🌙 Закрытая одежда"
+                ],
+                treatment: [
+                    "💊 Противомалярийные",
+                    "🏥 Стационар",
+                    "🩸 Контроль крови",
+                    "💧 Обильное питье"
+                ],
+                viewed: false,
+                favorite: false
+            },
+            {
+                name: "ВИЧ/СПИД",
+                period: "1981 - наши дни",
+                year: "1981",
+                mortality: "40 млн",
+                region: "Весь мир",
+                image: "spidvich.JPEG",
+                history: [
+                    "🦠 Зооноз от обезьян",
+                    "🌍 Пандемия с 1980-х",
+                    "💊 Терапия продлевает жизнь",
+                    "🔬 Лекарства нет"
+                ],
+                symptoms: [
+                    "🌡️ Температура",
+                    "😴 Усталость",
+                    "🦠 Инфекции",
+                    "📉 Потеря веса"
+                ],
+                prevention: [
+                    "🛡️ Презервативы",
+                    "💉 Стерильные иглы",
+                    "🩸 Тестирование",
+                    "🤰 Профилактика"
+                ],
+                treatment: [
+                    "💊 АРВТ терапия",
+                    "🏥 Наблюдение",
+                    "🩺 Иммунитет",
+                    "❤️ Поддержка"
+                ],
+                viewed: false,
+                favorite: false
+            },
+            {
+                name: "COVID-19",
+                period: "2019 - наши дни",
+                year: "2019",
+                mortality: "7 млн",
+                region: "Весь мир",
+                image: "covid.JPEG",
+                history: [
+                    "🦠 Начался в Ухане",
+                    "🌍 Первая пандемия XXI века",
+                    "💉 Вакцина за год",
+                    "🏠 Массовый карантин"
+                ],
+                symptoms: [
+                    "🌡️ Температура",
+                    "😮‍💨 Кашель",
+                    "😵 Потеря вкуса",
+                    "🫁 Одышка"
+                ],
+                prevention: [
+                    "😷 Маски",
+                    "🧴 Антисептики",
+                    "↔️ Дистанция",
+                    "💉 Вакцина"
+                ],
+                treatment: [
+                    "💊 Жаропонижающие",
+                    "🫁 Кислород",
+                    "🏥 Госпитализация",
+                    "💉 Антибиотики"
+                ],
+                viewed: false,
+                favorite: false
+            }
+        ];
+
+        // ========== ПЕРЕМЕННЫЕ ==========
+        let currentFilter = 'all';
+        let currentDiseaseIndex = 0;
+        let quizQuestions = [];
+        let currentQuestion = 0;
+        let quizScore = 0;
+        let totalVisits = localStorage.getItem('totalVisits') ? parseInt(localStorage.getItem('totalVisits')) : 0;
+
+        // ========== ИНИЦИАЛИЗАЦИЯ ==========
+        function init() {
+            totalVisits++;
+            localStorage.setItem('totalVisits', totalVisits);
+            loadFavorites();
+            createQuiz();
+            displayDiseases();
+            updateComparisonSelects();
+            updateCounters();
+            updateChart();
+        }
+
+        // ========== ОТОБРАЖЕНИЕ КАРТОЧЕК ==========
+        function displayDiseases() {
+            const grid = document.getElementById('diseasesGrid');
+            grid.innerHTML = '';
+            
+            diseases.forEach((disease, index) => {
+                const card = document.createElement('div');
+                card.className = `disease-card ${disease.viewed ? 'viewed' : ''} ${disease.favorite ? 'favorite' : ''}`;
+                card.onclick = () => openModal(index);
+                
+                card.innerHTML = `
+                    <div class="image-container">
+                        <img class="disease-image" src="${disease.image}" alt="${disease.name}">
+                    </div>
+                    <h3>${disease.name}</h3>
+                    <p>${disease.period.split(' - ')[0]}</p>
+                `;
+                grid.appendChild(card);
+            });
+            
+            updateStats();
+            updateTimeline();
+            updateFavoritesGrid();
+        }
+
+        // ========== ОБНОВЛЕНИЕ СТАТИСТИКИ ==========
+        function updateStats() {
+            const viewed = diseases.filter(d => d.viewed).length;
+            const favorites = diseases.filter(d => d.favorite).length;
+            const total = diseases.length;
+            
+            document.getElementById('viewedCount').textContent = viewed;
+            document.getElementById('remainingCount').textContent = total - viewed;
+            document.getElementById('favoritesCount').textContent = favorites;
+            document.getElementById('favoritesStats').textContent = favorites;
+            document.getElementById('progressFill').style.width = (viewed / total * 100) + '%';
+            document.getElementById('totalVisits').textContent = totalVisits;
+            document.getElementById('uniqueVisits').textContent = viewed;
+            
+            localStorage.setItem('favorites', JSON.stringify(diseases.map(d => d.favorite)));
+        }
+
+        // ========== ОБНОВЛЕНИЕ СЧЕТЧИКОВ ==========
+        function updateCounters() {
+            document.getElementById('quizScore').textContent = quizScore;
+        }
+
+        // ========== ШКАЛА ВРЕМЕНИ ==========
+        function updateTimeline() {
+            const timeline = document.getElementById('timeline');
+            timeline.innerHTML = '';
+            
+            diseases.forEach((disease, index) => {
+                const item = document.createElement('div');
+                item.className = 'timeline-item';
+                item.onclick = () => openModal(index);
+                item.innerHTML = `
+                    <div class="timeline-year">${disease.year}</div>
+                    <div class="timeline-disease">${disease.name}</div>
+                `;
+                timeline.appendChild(item);
+            });
+        }
+
+        // ========== ФИЛЬТРАЦИЯ ==========
+        function filterBy(type, btn) {
+            currentFilter = type;
+            
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            const searchText = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.disease-card');
+            
+            cards.forEach((card, index) => {
+                const disease = diseases[index];
+                let show = true;
+                
+                if (type === 'viewed' && !disease.viewed) show = false;
+                if (type === 'unviewed' && disease.viewed) show = false;
+                if (type === 'favorites' && !disease.favorite) show = false;
+                if (!disease.name.toLowerCase().includes(searchText)) show = false;
+                
+                card.style.display = show ? 'block' : 'none';
+            });
+        }
+
+        // ========== ПОИСК ==========
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const activeBtn = document.querySelector('.filter-btn.active');
+            filterBy(currentFilter, activeBtn);
+        });
+
+        // ========== ОТКРЫТИЕ МОДАЛКИ ==========
+        function openModal(index) {
+            const disease = diseases[index];
+            currentDiseaseIndex = index;
+            
+            if (!disease.viewed) {
+                disease.viewed = true;
+                displayDiseases();
+            }
+            
+            document.getElementById('modalTitle').textContent = disease.name;
+            document.getElementById('modalPeriod').textContent = disease.period;
+            document.getElementById('modalYear').textContent = disease.year;
+            document.getElementById('modalMortality').textContent = disease.mortality;
+            document.getElementById('modalRegion').textContent = disease.region;
+            document.getElementById('modalImage').src = disease.image;
+            
+            const historyList = document.getElementById('historyList');
+            historyList.innerHTML = '';
+            disease.history.forEach(h => {
+                const li = document.createElement('li');
+                li.textContent = h;
+                historyList.appendChild(li);
+            });
+            
+            const symptomsList = document.getElementById('symptomsList');
+            symptomsList.innerHTML = '';
+            disease.symptoms.forEach(s => {
+                const li = document.createElement('li');
+                li.textContent = s;
+                symptomsList.appendChild(li);
+            });
+            
+            const preventionList = document.getElementById('preventionList');
+            preventionList.innerHTML = '';
+            disease.prevention.forEach(p => {
+                const li = document.createElement('li');
+                li.textContent = p;
+                preventionList.appendChild(li);
+            });
+            
+            const treatmentList = document.getElementById('treatmentList');
+            treatmentList.innerHTML = '';
+            disease.treatment.forEach(t => {
+                const li = document.createElement('li');
+                li.textContent = t;
+                treatmentList.appendChild(li);
+            });
+            
+            const favBtn = document.querySelector('.favorite-btn');
+            favBtn.textContent = disease.favorite ? '⭐ В избранном' : '⭐ В избранное';
+            
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        // ========== ИЗБРАННОЕ ==========
+        function toggleFavorite() {
+            const disease = diseases[currentDiseaseIndex];
+            disease.favorite = !disease.favorite;
+            
+            const favBtn = document.querySelector('.favorite-btn');
+            favBtn.textContent = disease.favorite ? '⭐ В избранном' : '⭐ В избранное';
+            
+            displayDiseases();
+            showNotification(disease.favorite ? '⭐ Добавлено в избранное' : '⭐ Убрано из избранного');
+            localStorage.setItem('favorites', JSON.stringify(diseases.map(d => d.favorite)));
+        }
+
+        function loadFavorites() {
+            const saved = localStorage.getItem('favorites');
+            if (saved) {
+                const favorites = JSON.parse(saved);
+                diseases.forEach((d, i) => d.favorite = favorites[i]);
+            }
+        }
+
+        function updateFavoritesGrid() {
+            const grid = document.getElementById('favoritesGrid');
+            grid.innerHTML = '';
+            
+            diseases.filter(d => d.favorite).forEach(disease => {
+                const item = document.createElement('div');
+                item.className = 'favorite-item';
+                item.onclick = () => openModal(diseases.indexOf(disease));
+                item.innerHTML = `<h3>${disease.name}</h3>`;
+                grid.appendChild(item);
+            });
+        }
+
+        // ========== СЛУЧАЙНАЯ БОЛЕЗНЬ ==========
+        function openRandomDisease() {
+            const unviewed = diseases.reduce((acc, d, i) => !d.viewed ? [...acc, i] : acc, []);
+            if (unviewed.length > 0) {
+                const random = unviewed[Math.floor(Math.random() * unviewed.length)];
+                openModal(random);
+            } else {
+                showNotification('🎉 Все болезни изучены!');
+            }
+        }
+
+        // ========== СБРОС ==========
+        function resetViewed() {
+            diseases.forEach(d => d.viewed = false);
+            displayDiseases();
+            showNotification('🔄 Прогресс сброшен');
+        }
+
+        // ========== ЭКСПОРТ ==========
+        function exportData() {
+            const stats = {
+                date: new Date().toLocaleString(),
+                total: diseases.length,
+                viewed: diseases.filter(d => d.viewed).length,
+                favorites: diseases.filter(d => d.favorite).length
+            };
+            
+            downloadJSON(stats, 'stats.json');
+            showNotification('📥 Статистика сохранена');
+        }
+
+        function downloadJSON(data, filename) {
+            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+        }
+
+        // ========== ПОДЕЛИТЬСЯ ==========
+        function shareDisease() {
+            const d = diseases[currentDiseaseIndex];
+            const text = `🦠 ${d.name}\n📅 ${d.period}\n💀 ${d.mortality}\n🛡️ ${d.prevention[0]}`;
+            navigator.clipboard.writeText(text);
+            showNotification('📋 Скопировано');
+        }
+
+        // ========== СРАВНЕНИЕ ==========
+        function updateComparisonSelects() {
+            const select1 = document.getElementById('compare1');
+            const select2 = document.getElementById('compare2');
+            
+            select1.innerHTML = '';
+            select2.innerHTML = '';
+            
+            diseases.forEach((d, i) => {
+                select1.innerHTML += `<option value="${i}">${d.name}</option>`;
+                select2.innerHTML += `<option value="${i}">${d.name}</option>`;
+            });
+            
+            if (diseases.length > 1) select2.value = 1;
+            updateComparison();
+        }
+
+        function updateComparison() {
+            const i1 = parseInt(document.getElementById('compare1').value);
+            const i2 = parseInt(document.getElementById('compare2').value);
+            
+            if (i1 === i2) {
+                document.getElementById('compareTable').innerHTML = '<p style="color:#ff6b6b">Выберите разные болезни</p>';
+                return;
+            }
+            
+            const d1 = diseases[i1];
+            const d2 = diseases[i2];
+            
+            document.getElementById('compareTable').innerHTML = `
+                <div class="compare-col">
+                    <h3>${d1.name}</h3>
+                    <ul>
+                        <li>📅 Год: ${d1.year}</li>
+                        <li>💀 Смертность: ${d1.mortality}</li>
+                        <li>🌍 Регион: ${d1.region}</li>
+                        <li>🤒 Симптомы: ${d1.symptoms.length}</li>
+                        <li>🛡️ Профилактика: ${d1.prevention.length}</li>
+                    </ul>
+                </div>
+                <div class="compare-col">
+                    <h3>${d2.name}</h3>
+                    <ul>
+                        <li>📅 Год: ${d2.year}</li>
+                        <li>💀 Смертность: ${d2.mortality}</li>
+                        <li>🌍 Регион: ${d2.region}</li>
+                        <li>🤒 Симптомы: ${d2.symptoms.length}</li>
+                        <li>🛡️ Профилактика: ${d2.prevention.length}</li>
+                    </ul>
+                </div>
+            `;
+        }
+
+        function addToCompare() {
+            const disease = diseases[currentDiseaseIndex];
+            const index = diseases.indexOf(disease);
+            const select1 = document.getElementById('compare1');
+            const select2 = document.getElementById('compare2');
+            
+            if (select1.value == index) {
+                select2.value = index;
+            } else {
+                select1.value = index;
+            }
+            updateComparison();
+            scrollToCompare();
+        }
+
+        function scrollToCompare() {
+            document.getElementById('compareSection').scrollIntoView({behavior: 'smooth'});
+        }
+
+        // ========== ВИКТОРИНА ==========
+        function createQuiz() {
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+            
+            const baseQuestions = [
+                {
+                    question: "Какая болезнь унесла жизни 50 млн человек в 1918-1920 годах?",
+                    options: ["Испанский грипп", "Чума", "Холера", "ВИЧ"],
+                    correct: "Испанский грипп"
+                },
+                {
+                    question: "Какой симптом характерен для бубонной чумы?",
+                    options: ["Воспаленные лимфоузлы", "Сыпь на теле", "Потеря вкуса", "Кровавый кашель"],
+                    correct: "Воспаленные лимфоузлы"
+                },
+                {
+                    question: "Какая болезнь была полностью искоренена в 1980 году?",
+                    options: ["Натуральная оспа", "Чума", "Холера", "Малярия"],
+                    correct: "Натуральная оспа"
+                },
+                {
+                    question: "Что является переносчиком малярии?",
+                    options: ["Комары", "Крысы", "Клещи", "Блохи"],
+                    correct: "Комары"
+                },
+                {
+                    question: "В каком году началась пандемия COVID-19?",
+                    options: ["2019", "2020", "2018", "2021"],
+                    correct: "2019"
+                },
+                {
+                    question: "Какой метод профилактики ВИЧ самый эффективный?",
+                    options: ["Презервативы", "Маски", "Вакцинация", "Антисептики"],
+                    correct: "Презервативы"
+                },
+                {
+                    question: "Какая болезнь вызывается бактерией Vibrio cholerae?",
+                    options: ["Холера", "Чума", "Сифилис", "Туберкулез"],
+                    correct: "Холера"
+                },
+                {
+                    question: "Сколько миллионов жизней унесла натуральная оспа?",
+                    options: ["300-500 млн", "50 млн", "100 млн", "1 млрд"],
+                    correct: "300-500 млн"
+                },
+                {
+                    question: "Какой симптом НЕ характерен для COVID-19?",
+                    options: ["Воспаленные лимфоузлы", "Потеря вкуса", "Кашель", "Температура"],
+                    correct: "Воспаленные лимфоузлы"
+                },
+                {
+                    question: "В каком веке была пандемия чумы ('Черная смерть')?",
+                    options: ["XIV век", "XII век", "XVI век", "XVIII век"],
+                    correct: "XIV век"
+                },
+                {
+                    question: "Как передается сифилис?",
+                    options: ["Половым путем", "Воздушно-капельным", "Через воду", "Через еду"],
+                    correct: "Половым путем"
+                },
+                {
+                    question: "Кто открыл возбудителя холеры?",
+                    options: ["Роберт Кох", "Луи Пастер", "Александр Флеминг", "Илья Мечников"],
+                    correct: "Роберт Кох"
+                },
+                {
+                    question: "Как лечат ВИЧ?",
+                    options: ["АРВТ терапия", "Антибиотики", "Вакцинация", "Покой"],
+                    correct: "АРВТ терапия"
+                },
+                {
+                    question: "Какой орган поражает малярия?",
+                    options: ["Печень", "Легкие", "Сердце", "Почки"],
+                    correct: "Печень"
+                },
+                {
+                    question: "Что означает слово 'карантин'?",
+                    options: ["40 дней", "30 дней", "14 дней", "7 дней"],
+                    correct: "40 дней"
+                }
+            ];
+            
+            quizQuestions = baseQuestions.map(q => ({
+                question: q.question,
+                correct: q.correct,
+                options: shuffleArray([...q.options])
+            }));
+            
+            showQuizQuestion();
+        }
+
+        function showQuizQuestion() {
+            if (currentQuestion >= quizQuestions.length) {
+                document.getElementById('quizQuestion').innerHTML = `
+                    <p>🎉 Викторина завершена! Правильных ответов: ${quizScore}/${quizQuestions.length}</p>
+                    <button class="quiz-next" onclick="resetQuiz()">🔄 Начать заново</button>
+                `;
+                return;
+            }
+            
+            const q = quizQuestions[currentQuestion];
+            let html = `<p>${q.question}</p><div class="quiz-options">`;
+            
+            q.options.forEach(opt => {
+                html += `<div class="quiz-option" onclick="checkAnswer('${opt}', '${q.correct}', this)">${opt}</div>`;
+            });
+            
+            html += '</div>';
+            document.getElementById('quizQuestion').innerHTML = html;
+            document.getElementById('quizCurrent').textContent = currentQuestion + 1;
+            document.getElementById('quizTotal').textContent = quizQuestions.length;
+        }
+
+        function checkAnswer(selected, correct, element) {
+            if (selected === correct) {
+                element.classList.add('correct');
+                quizScore++;
+                document.getElementById('quizCorrect').textContent = quizScore;
+                updateCounters();
+                showNotification('✅ Правильно!');
+            } else {
+                element.classList.add('wrong');
+                showNotification('❌ Неправильно');
+            }
+            
+            document.querySelectorAll('.quiz-option').forEach(opt => {
+                opt.style.pointerEvents = 'none';
+            });
+            
+            setTimeout(() => {
+                currentQuestion++;
+                showQuizQuestion();
+            }, 1500);
+        }
+
+        function scrollToQuiz() {
+            document.getElementById('quizSection').scrollIntoView({behavior: 'smooth'});
+            if (currentQuestion >= quizQuestions.length) resetQuiz();
+            else showQuizQuestion();
+        }
+
+        function resetQuiz() {
+            currentQuestion = 0;
+            quizScore = 0;
+            document.getElementById('quizCorrect').textContent = '0';
+            createQuiz();
+            showQuizQuestion();
+        }
+
+        // ========== ГРАФИК ==========
+        function updateChart() {
+            const chart = document.getElementById('chart');
+            const mortalityValues = [85, 50, 400, 8, 50, 0.4, 40, 7];
+            const diseaseNames = ["Чума", "Испанка", "Оспа", "Сифилис", "Холера", "Малярия", "ВИЧ", "COVID"];
+            const maxMortality = 400;
+            
+            chart.innerHTML = '';
+            
+            mortalityValues.forEach((value, i) => {
+                const barHeight = (value / maxMortality) * 250;
+                
+                const item = document.createElement('div');
+                item.className = 'chart-item';
+                
+                const bar = document.createElement('div');
+                bar.className = 'chart-bar';
+                bar.style.height = barHeight + 'px';
+                bar.innerHTML = `<span>${value} млн</span>`;
+                bar.onclick = () => openModal(i);
+                
+                const label = document.createElement('div');
+                label.className = 'chart-label';
+                label.textContent = diseaseNames[i];
+                
+                item.appendChild(bar);
+                item.appendChild(label);
+                chart.appendChild(item);
+            });
+        }
+
+        // ========== ТЕМА ==========
+        function toggleTheme() {
+            document.body.classList.toggle('light-theme');
+            showNotification('🎨 Тема изменена');
+        }
+
+        // ========== УВЕДОМЛЕНИЯ ==========
+        function showNotification(msg) {
+            const notif = document.getElementById('notification');
+            notif.textContent = msg;
+            notif.classList.add('show');
+            setTimeout(() => notif.classList.remove('show'), 3000);
+        }
+
+        // ========== ЗАКРЫТИЕ ==========
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        window.onclick = (e) => {
+            if (e.target.classList.contains('modal')) closeModal();
+        };
+
+        // ========== ЗАПУСК ==========
+        init();
+    </script>
+</body>
+</html>
